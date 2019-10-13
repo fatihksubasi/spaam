@@ -130,3 +130,26 @@ class SPAAM():
             G *= -1
 
         return G
+
+     # compute projection and transformation matrices
+    def get_transformation_matrix(self, G):
+        # decompose G matrix into camera and rotation matrices
+        K, R = linalg.rq(G[:, 0:3])
+
+        K, R = self._correct_diagonal(K, R)
+
+        # rotation matrix should have positive determinant by definition
+        if np.linalg.det(R) == -1:
+            R = -R
+
+        # translation vector
+        t = np.dot(np.linalg.inv(K), G[:, 3])
+
+        # composing transformation matrix
+        A = np.column_stack((R, t))
+
+        # reshaping camera matrix
+        K = np.column_stack((K, np.array([0, 0, 0])))
+
+        return K, A
+

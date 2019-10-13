@@ -26,6 +26,13 @@ if __name__ == '__main__':
 
     spaam = SPAAM(pImage, pWorld)
     G = spaam.get_camera_matrix()
+    K, A = spaam.get_transformation_matrix(G)
 
     print("G Matrix:")
     print(G)
+    print("\n")
+    print("Projection (Camera) Matrix (K):")
+    print(K)
+    print("\n")
+    print("Transformation Matrix (R|t)")
+    print(A)
