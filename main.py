@@ -4,7 +4,7 @@ import argparse
 import csv
 from spaam import SPAAM
 
-if __name__ == '__main__':
+def main():
     parser = argparse.ArgumentParser(
         description='Provide file path to csv file containing Pixel and corresponding 3D Coordinate Values')
     parser.add_argument("filePath", type=str, help='path to relevant csv file')
@@ -25,8 +25,8 @@ if __name__ == '__main__':
             print(e)
 
     spaam = SPAAM(pImage, pWorld)
-    G = spaam.get_camera_matrix()
-    K, A = spaam.get_transformation_matrix(G)
+    G = spaam.getCameraMatrix()
+    K, A = spaam.getTransformationMatrix()
 
     print("G Matrix:")
     print(G)
@@ -36,3 +36,6 @@ if __name__ == '__main__':
     print("\n")
     print("Transformation Matrix (R|t)")
     print(A)
+
+if __name__ == '__main__':
+    main()    

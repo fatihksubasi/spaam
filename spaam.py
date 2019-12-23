@@ -74,7 +74,7 @@ class SPAAM():
         return K, R
 
     # computes G matrix
-    def get_camera_matrix(self):
+    def getCameraMatrix(self):
         B = np.zeros((2*self.numSamples, 12))
 
         # decomposing the coefficient matrix B and setting values
@@ -116,25 +116,25 @@ class SPAAM():
         smallestValues = V[:, 11].reshape(3, 4)
 
         # denormalizing
-        G = np.dot(np.dot(self.iDenom, smallestValues), self.wDenom)
+        self.G = np.dot(np.dot(self.iDenom, smallestValues), self.wDenom)
 
         # normalize matrix in z direction
-        normalDirection = math.sqrt(G[2, 0]**2 + G[2, 1]**2 + G[2, 2]**2)
-        G *= 1 / normalDirection
+        normalDirection = math.sqrt(self.G[2, 0]**2 + self.G[2, 1]**2 + self.G[2, 2]**2)
+        self.G *= 1 / normalDirection
 
         # all projected points should have positive z values
         # check a point and correct G matrix if necessary
-        isNegative = G[2, 0] * self.pWorld[0, 0] + G[2, 1] * \
-            self.pWorld[0, 1] + G[2, 2] * self.pWorld[0, 2] + G[2, 3]
+        isNegative = self.G[2, 0] * self.pWorld[0, 0] + self.G[2, 1] * \
+            self.pWorld[0, 1] + self.G[2, 2] * self.pWorld[0, 2] + self.G[2, 3]
         if isNegative < 0:
-            G *= -1
-
-        return G
+            self.G *= -1
+         
+        return self.G
 
      # compute projection and transformation matrices
-    def get_transformation_matrix(self, G):
+    def getTransformationMatrix(self):
         # decompose G matrix into camera and rotation matrices
-        K, R = linalg.rq(G[:, 0:3])
+        K, R = linalg.rq(self.G[:, 0:3])
 
         K, R = self._correct_diagonal(K, R)
 
@@ -143,7 +143,7 @@ class SPAAM():
             R = -R
 
         # translation vector
-        t = np.dot(np.linalg.inv(K), G[:, 3])
+        t = np.dot(np.linalg.inv(K), self.G[:, 3])
 
         # composing transformation matrix
         A = np.column_stack((R, t))
