@@ -74,7 +74,7 @@ class SPAAM():
         return K, R
 
     # computes G matrix
-    def getCameraMatrix(self):
+    def get_camera_matrix(self):
         B = np.zeros((2*self.numSamples, 12))
 
         # decomposing the coefficient matrix B and setting values
@@ -132,7 +132,7 @@ class SPAAM():
         return self.G
 
      # compute projection and transformation matrices
-    def getTransformationMatrix(self):
+    def get_transformation_matrix(self):
         # decompose G matrix into camera and rotation matrices
         K, R = linalg.rq(self.G[:, 0:3])
 

@@ -25,8 +25,8 @@ def main():
             print(e)
 
     spaam = SPAAM(pImage, pWorld)
-    G = spaam.getCameraMatrix()
-    K, A = spaam.getTransformationMatrix()
+    G = spaam.get_camera_matrix()
+    K, A = spaam.get_transformation_matrix()
 
     print("G Matrix:")
     print(G)
